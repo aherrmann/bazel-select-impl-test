@@ -10,14 +10,16 @@ config_setting(
     name = "use-a",
     flag_values = {
         ":peek-flag": "a"
-    }
+    },
+    visibility = ["//visibility:public"],
 )
 
 config_setting(
     name = "use-b",
     flag_values = {
         ":peek-flag": "b"
-    }
+    },
+    visibility = ["//visibility:public"],
 )
 
 cc_library(
@@ -30,9 +32,6 @@ cc_library(
 cc_library(
     name = "peek",
     srcs = ["peek.cpp"],
-    deps = [":peek_iface"] + select({
-        ":use-a": ["//peekA"],
-        ":use-b": ["//peekB"],
-    }),
+    deps = [":peek_iface"],
     visibility = ["//visibility:public"],
 )
