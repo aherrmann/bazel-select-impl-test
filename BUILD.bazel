@@ -1,7 +1,7 @@
 cc_binary(
     name = "main",
     srcs = ["main.cpp"],
-    deps = ["//peek"] + select({
+    deps = select({
         "//peek:use-a": ["//peekA"],
         "//peek:use-b": ["//peekB"],
     }),

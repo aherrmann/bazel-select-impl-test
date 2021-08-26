@@ -1,6 +1,11 @@
 cc_library(
-    name = "peekB",
+    name = "peekB_impl",
     srcs = ["peek.cpp"],
     deps = ["//peek:peek_iface"],
+)
+
+cc_library(
+    name = "peekB",
+    deps = ["//peek", ":peekB_impl"],
     visibility = ["//visibility:public"],
 )
