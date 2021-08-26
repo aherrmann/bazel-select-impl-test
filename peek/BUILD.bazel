@@ -1,0 +1,7 @@
+cc_library(
+    name = "peek",
+    srcs = ["peek.cpp"],
+    hdrs = ["peek.h"],
+    includes = ["."],
+    visibility = ["//visibility:public"],
+)

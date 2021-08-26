@@ -1,0 +1,6 @@
+cc_library(
+    name = "peekB",
+    srcs = ["peek.cpp"],
+    deps = ["//peek"],
+    visibility = ["//visibility:public"],
+)
