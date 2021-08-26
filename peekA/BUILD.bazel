@@ -1,11 +1,22 @@
+
+load("//:def.bzl", "set_backend")
+
 cc_library(
+    linkstatic = True,
     name = "peekA_impl",
     srcs = ["peek.cpp"],
     deps = ["//peek:peek_iface"],
 )
 
-cc_library(
-    name = "peekA",
-    deps = ["//peek", ":peekA_impl"],
+set_backend(name = 'peekA',
+    backend_lib = "peekA_impl",
+    library = "//peek",
     visibility = ["//visibility:public"],
 )
+
+# cc_library(
+#     linkstatic = True,
+#     name = "peekA",
+#     deps = ["//peek", ":peekA_impl"],
+#     visibility = ["//visibility:public"],
+# )

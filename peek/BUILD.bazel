@@ -1,37 +1,21 @@
-load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
+load("//:def.bzl", "create_backend")
 
-string_flag(
-    name = "peek-flag",
-    values = ["a", "b"],
-    build_setting_default = "a",
-)
-
-config_setting(
-    name = "use-a",
-    flag_values = {
-        ":peek-flag": "a"
-    },
-    visibility = ["//visibility:public"],
-)
-
-config_setting(
-    name = "use-b",
-    flag_values = {
-        ":peek-flag": "b"
-    },
-    visibility = ["//visibility:public"],
+create_backend(
+    name = "mybackend",
 )
 
 cc_library(
     name = "peek_iface",
     hdrs = ["peek.h"],
     includes = ["."],
+    linkstatic = True,
     visibility = ["//visibility:public"],
 )
 
 cc_library(
     name = "peek",
     srcs = ["peek.cpp"],
-    deps = [":peek_iface"],
+    linkstatic = True,
     visibility = ["//visibility:public"],
+    deps = [":peek_iface", "//peek:mybackend"],
 )
