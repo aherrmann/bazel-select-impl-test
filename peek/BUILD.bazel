@@ -1,7 +1,38 @@
+load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
+
+string_flag(
+    name = "peek-flag",
+    values = ["a", "b"],
+    build_setting_default = "a",
+)
+
+config_setting(
+    name = "use-a",
+    flag_values = {
+        ":peek-flag": "a"
+    }
+)
+
+config_setting(
+    name = "use-b",
+    flag_values = {
+        ":peek-flag": "b"
+    }
+)
+
+cc_library(
+    name = "peek_iface",
+    hdrs = ["peek.h"],
+    includes = ["."],
+    visibility = ["//visibility:public"],
+)
+
 cc_library(
     name = "peek",
     srcs = ["peek.cpp"],
-    hdrs = ["peek.h"],
-    includes = ["."],
+    deps = [":peek_iface"] + select({
+        ":use-a": ["//peekA"],
+        ":use-b": ["//peekB"],
+    }),
     visibility = ["//visibility:public"],
 )
