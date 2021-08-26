@@ -1,8 +1,18 @@
-load("//:def.bzl", "create_backend")
+load("//:def.bzl", "create_backend")# , "create_backend_setting")
 
-create_backend(
-    name = "mybackend",
-)
+create_backend()
+
+
+# label_setting(
+#     name = "mybackend",
+#     build_setting_default = ":empty",
+# )
+
+# create_backend_setting(
+#     name = "mybackend",
+#     build_setting_default = ":empty",
+#     lib = ":empty",
+# )
 
 cc_library(
     name = "peek_iface",
@@ -17,5 +27,8 @@ cc_library(
     srcs = ["peek.cpp"],
     linkstatic = True,
     visibility = ["//visibility:public"],
-    deps = [":peek_iface", "//peek:mybackend"],
+    deps = [
+        ":peek_iface",
+        ":mybackend",
+    ],
 )

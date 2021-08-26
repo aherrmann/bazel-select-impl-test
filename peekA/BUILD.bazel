@@ -13,10 +13,3 @@ set_backend(name = 'peekA',
     library = "//peek",
     visibility = ["//visibility:public"],
 )
-
-# cc_library(
-#     linkstatic = True,
-#     name = "peekA",
-#     deps = ["//peek", ":peekA_impl"],
-#     visibility = ["//visibility:public"],
-# )
