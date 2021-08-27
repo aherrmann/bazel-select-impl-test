@@ -1,41 +1,46 @@
-load("@rules_cc//cc:defs.bzl", "cc_library")
 
-def create_backend(name):
-    cc_library(
-        name = "empty",
-        visibility = ["//visibility:public"],
-    )
+_LABEL_NAME = "facade_implemenation"
 
+def _facade_label(package):
+    return "//{}:{}".format(package, _LABEL_NAME)
+
+def _setup_facade(name):
+    """Setup a facade for a library"""
     native.label_setting(
-        name = "mybackend",
-        build_setting_default = ":empty",
+        name = _LABEL_NAME,
+        build_setting_default = "//:empty",
     )
 
-def _backend_transition_impl(settings, attr):
+def _create_facade_impl(ctx):
+    """Return the facade implemenation library."""
+    lib = ctx.attr.facade[0]
+    return lib[CcInfo]
+
+def _facade_transition_impl(settings, attr, label):
+    """Implemenation of transition for the facade"""
+    return {label: attr.facade_impl}
+
+def _facade_attributes(transition_fn):
     return {
-        "//peek:mybackend": attr.backend_lib,
-    }
-
-_backend_transition = transition(
-    implementation = _backend_transition_impl,
-    inputs = [],
-    outputs = ["//peek:mybackend"],
-)
-
-def _set_backend_impl(ctx):
-    return [ctx.attr.library[0][CcInfo]]
-
-set_backend = rule(
-    implementation = _set_backend_impl,
-    attrs = {
-        "backend_lib": attr.label(mandatory = True),
-        "_allowlist_function_transition": attr.label(
-            default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
+        "facade_impl": attr.label(
+            doc = "Library that implements the interface",
+            mandatory = True,
         ),
-        "library": attr.label(
-            cfg = _backend_transition,
+        "facade": attr.label(
+            doc = "Library that needs a implemenation to function",
+            cfg = transition_fn,
             mandatory = True,
             providers = [CcInfo],
         ),
-    },
+        "_allowlist_function_transition": attr.label(
+            default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
+        ),
+    }
+
+facade = struct(
+    label = _facade_label,
+    setup_facade_library = _setup_facade,
+    rule_impl = _create_facade_impl,
+    transition_impl = _facade_transition_impl,
+    attributes = _facade_attributes,
 )

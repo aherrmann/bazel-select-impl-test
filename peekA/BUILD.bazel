@@ -1,5 +1,5 @@
 
-load("//:def.bzl", "set_backend")
+load("//peek:def.bzl", "create_facade_library")
 
 cc_library(
     linkstatic = True,
@@ -8,8 +8,8 @@ cc_library(
     deps = ["//peek:peek_iface"],
 )
 
-set_backend(name = 'peekA',
-    backend_lib = "peekA_impl",
-    library = "//peek",
+create_facade_library(name = 'peekA',
+    facade_impl = "peekA_impl",
+    facade = "//peek",
     visibility = ["//visibility:public"],
 )

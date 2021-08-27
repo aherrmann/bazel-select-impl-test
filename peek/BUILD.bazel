@@ -1,18 +1,7 @@
-load("//:def.bzl", "create_backend")# , "create_backend_setting")
+load(":def.bzl", "FACADE_LABEL")
+load("//:def.bzl", "facade")
 
-create_backend()
-
-
-# label_setting(
-#     name = "mybackend",
-#     build_setting_default = ":empty",
-# )
-
-# create_backend_setting(
-#     name = "mybackend",
-#     build_setting_default = ":empty",
-#     lib = ":empty",
-# )
+facade.setup_facade_library("facade")
 
 cc_library(
     name = "peek_iface",
@@ -29,6 +18,6 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         ":peek_iface",
-        ":mybackend",
+        FACADE_LABEL,
     ],
 )
